@@ -1,0 +1,1 @@
+This is a data collection service created for the Android operating system.
