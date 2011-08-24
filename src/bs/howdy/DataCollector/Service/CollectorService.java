@@ -3,6 +3,7 @@ package bs.howdy.DataCollector.Service;
 import java.util.*;
 
 import bs.howdy.DataCollector.*;
+import bs.howdy.DataCollector.Collectors.GasCollector;
 
 import android.app.Service;
 import android.content.Intent;
@@ -10,6 +11,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class CollectorService extends Service {
+
+	private Timer timer;
+	//private ArrayList<IDataCollector> _collectors;
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -21,9 +25,14 @@ public class CollectorService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		Log.i(Constants.TAG, "Service creating");
+		
+//		_collectors = new ArrayList<IDataCollector>();
+//		_collectors.add();
+		GasCollector gc = new GasCollector();
+		CollectorTask task = new CollectorTask(gc);
 	 
-	    timer = new Timer("TweetCollectorTimer");
-	    timer.schedule(updateTask, 1000L, 1000L);
+	    timer = new Timer();
+	    timer.schedule(task, 1000L, 15000L);
 	}
 	 
 	@Override
@@ -36,13 +45,4 @@ public class CollectorService extends Service {
 	    if(temp != null)
 	    	temp.cancel();
 	}
-	
-	private Timer timer;
-	 
-	private TimerTask updateTask = new TimerTask() {
-	    @Override
-	    public void run() {
-	      Log.i(Constants.TAG, "Timer task doing work");
-	    }
-	};
 }

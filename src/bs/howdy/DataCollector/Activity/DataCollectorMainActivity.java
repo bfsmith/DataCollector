@@ -1,10 +1,23 @@
 package bs.howdy.DataCollector.Activity;
 
+import java.io.InputStream;
+import java.net.URLDecoder;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import bs.howdy.DataCollector.Constants;
 import bs.howdy.DataCollector.R;
+import bs.howdy.DataCollector.Collectors.GasCollectorUtility;
 import bs.howdy.DataCollector.Service.CollectorService;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 public class DataCollectorMainActivity extends Activity {
     /** Called when the activity is first created. */
@@ -13,7 +26,28 @@ public class DataCollectorMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        startService(new Intent(CollectorService.class.getName()));
+        //startService(new Intent(CollectorService.class.getName()));
+//        TextView tv = (TextView)findViewById(R.id.textView01);
+//        try {
+//	        String message = URLDecoder.decode("zrhIFsKL%2FUaNp3d6s%2Fy6kpmxHQ01sRnZxVwo8WNhY5yizNVvk1ObUm5LO1NAsveMoJYb9BHJfAA%3D",
+//    			"UTF-8");
+//	        GasCollectorUtility utility = GasCollectorUtility.getInstance();
+//	        byte[] decoded = utility.decodeBase64(message);
+//	        String content = utility.decrypt3Des(decoded);
+//	        tv.setText(content);
+//	        Log.i(Constants.TAG, content);
+//	        
+//	        String url = utility.getStationUrl(40049);
+//	        Log.i(Constants.TAG, url);
+//        } catch(Exception ex) {
+//        	tv.setText(ex.toString());
+//        }
+        
+        GasCollectorUtility utility = GasCollectorUtility.getInstance();
+        InputStream in = getResources().openRawResource(R.raw.response);
+		String response = utility.streamToString(in);
+        utility.parseResponse(response);
+        
     }
     
     @Override
