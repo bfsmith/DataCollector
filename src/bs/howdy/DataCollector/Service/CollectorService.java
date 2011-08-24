@@ -3,7 +3,7 @@ package bs.howdy.DataCollector.Service;
 import java.util.*;
 
 import bs.howdy.DataCollector.*;
-import bs.howdy.DataCollector.Collectors.GasCollector;
+import bs.howdy.DataCollector.Collectors.Gas.*;
 
 import android.app.Service;
 import android.content.Intent;

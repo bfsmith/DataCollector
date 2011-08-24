@@ -1,4 +1,4 @@
-package bs.howdy.DataCollector.Collectors;
+package bs.howdy.DataCollector.Collectors.Gas;
 
 import java.io.*;
 

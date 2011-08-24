@@ -1,23 +1,18 @@
 package bs.howdy.DataCollector.Activity;
 
 import java.io.InputStream;
-import java.net.URLDecoder;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import bs.howdy.DataCollector.Constants;
 import bs.howdy.DataCollector.R;
-import bs.howdy.DataCollector.Collectors.GasCollectorUtility;
+import bs.howdy.DataCollector.Collectors.Gas.*;
 import bs.howdy.DataCollector.Service.CollectorService;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 public class DataCollectorMainActivity extends Activity {
     /** Called when the activity is first created. */
@@ -46,8 +41,7 @@ public class DataCollectorMainActivity extends Activity {
         GasCollectorUtility utility = GasCollectorUtility.getInstance();
         InputStream in = getResources().openRawResource(R.raw.response);
 		String response = utility.streamToString(in);
-        utility.parseResponse(response);
-        
+        Log.v(Constants.TAG, utility.parseStationResponse(response));
     }
     
     @Override
