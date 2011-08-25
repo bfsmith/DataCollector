@@ -22,7 +22,7 @@ public class DataProvider implements IDataProvider {
 	private void feedData() {
 		StationFactory factory = StationFactory.getInstance();
 		for(int i = 1; i <= 3; i++) {
-			Station station = factory.getStation(i, "Station" + (i+1), "Location" + (i+1));
+			Station station = factory.getStation(i, "Station" + i, "Location" + i);
 			for(int j = 0; j < 3; j++) {
 				for(GasGrade grade : GasGrade.values()) {
 					station.addGasPrice(new GasPrice(grade, 3.2f, new Date()));

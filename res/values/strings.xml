@@ -2,4 +2,9 @@
 <resources>
     <string name="hello">Hello World, DataCollectorMainActivity!</string>
     <string name="app_name">DataCollector</string>
+    <string name="NoStations">No stations found...</string>
+    <string name="Regular">Regular</string>
+    <string name="Mid">Mid</string>
+    <string name="Premium">Premium</string>
+    <string name="Diesel">Diesel</string>
 </resources>

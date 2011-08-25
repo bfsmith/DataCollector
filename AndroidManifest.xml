@@ -28,5 +28,7 @@
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
         </receiver>
+        <activity android:name=".Collectors.Gas.Activities.StationsListActivity"></activity>
+        <activity android:name=".Collectors.Gas.Activities.StationInfoActivity"></activity>
     </application>
 </manifest>
