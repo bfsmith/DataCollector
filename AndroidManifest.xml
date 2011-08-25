@@ -30,5 +30,7 @@
         </receiver>
         <activity android:name=".Collectors.Gas.Activities.StationsListActivity"></activity>
         <activity android:name=".Collectors.Gas.Activities.StationInfoActivity"></activity>
+        <activity android:name=".Collectors.Gas.Activities.ChartDemo"></activity>
+        <activity android:name="org.achartengine.GraphicalActivity"></activity>
     </application>
 </manifest>

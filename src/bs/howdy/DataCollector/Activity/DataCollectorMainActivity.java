@@ -1,6 +1,7 @@
 package bs.howdy.DataCollector.Activity;
 
 import bs.howdy.DataCollector.R;
+import bs.howdy.DataCollector.Collectors.Gas.Activities.ChartDemo;
 import bs.howdy.DataCollector.Collectors.Gas.Activities.StationsListActivity;
 import bs.howdy.DataCollector.Service.CollectorService;
 import android.app.Activity;
@@ -26,5 +27,9 @@ public class DataCollectorMainActivity extends Activity {
     
     public void listStations(View v) {
     	startActivity(new Intent(this, StationsListActivity.class));
+    }
+    
+    public void chartDemo(View v) {
+    	startActivity(new Intent(this, ChartDemo.class));
     }
 }

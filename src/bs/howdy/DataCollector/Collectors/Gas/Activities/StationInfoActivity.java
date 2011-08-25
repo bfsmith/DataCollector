@@ -1,6 +1,10 @@
 package bs.howdy.DataCollector.Collectors.Gas.Activities;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.model.XYSeries;
 
 import bs.howdy.DataCollector.R;
 import bs.howdy.DataCollector.Collectors.Gas.*;
@@ -69,6 +73,20 @@ public class StationInfoActivity extends Activity {
     		table.addView(row);
     	}
 	}
+	
+	private XYMultipleSeriesDataset getDataset(ArrayList<GasPrice> prices) {
+	    XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+	    final int nr = 10;
+	    Random r = new Random();
+	    for (int i = 0; i < SERIES_NR; i++) {
+	      XYSeries series = new XYSeries("Demo series " + (i + 1));
+	      for (int k = 0; k < nr; k++) {
+	        series.add(k, 20 + r.nextInt() % 100);
+	      }
+	      dataset.addSeries(series);
+	    }
+	    return dataset;
+	  }
 	
 	private void addTextView(TableRow row, float price) {
 		TextView tv = new TextView(this);

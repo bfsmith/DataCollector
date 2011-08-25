@@ -12,4 +12,6 @@
     />
 <Button android:text="List Stations" android:layout_width="wrap_content" android:layout_height="wrap_content"
 	android:onClick="listStations" />
+<Button android:text="Chart Demo" android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:onClick="chartDemo" />
 </LinearLayout>
