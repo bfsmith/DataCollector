@@ -29,6 +29,7 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,7 +39,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class ChartDemo extends Activity {
+public class ChartDemo extends ListActivity {
 	public interface IDemoChart {
 		  /** A constant for the name field in a list activity. */
 		  String NAME = "name";

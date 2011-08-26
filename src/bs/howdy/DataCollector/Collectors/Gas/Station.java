@@ -2,15 +2,16 @@ package bs.howdy.DataCollector.Collectors.Gas;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Station {
 	private int _id;
 	private String _name;
 	private String _location;
-	private ArrayList<GasPrice> _regularPrices;
-	private ArrayList<GasPrice> _midPrices;
-	private ArrayList<GasPrice> _premiumPrices;
-	private ArrayList<GasPrice> _dieselPrices;
+	private List<GasPrice> _regularPrices;
+	private List<GasPrice> _midPrices;
+	private List<GasPrice> _premiumPrices;
+	private List<GasPrice> _dieselPrices;
 	
 	public Station(int id, String name, String location) {
 		_id = id;
@@ -32,49 +33,67 @@ public class Station {
 		return _location;
 	}
 	
-	public ArrayList<GasPrice> getRegularPrices() {
+	public List<GasPrice> getRegularPrices() {
 		return _regularPrices;
 	}
-	public void setRegularPrices(ArrayList<GasPrice> regularPrices) {
+	public void setRegularPrices(List<GasPrice> regularPrices) {
 		_regularPrices = regularPrices;
 	}
 	
-	public ArrayList<GasPrice> getMidPrices() {
+	public List<GasPrice> getMidPrices() {
 		return _midPrices;
 	}
-	public void setMidPrices(ArrayList<GasPrice> midPrices) {
+	public void setMidPrices(List<GasPrice> midPrices) {
 		_midPrices = midPrices;
 	}
 	
-	public ArrayList<GasPrice> getPremiumPrices() {
+	public List<GasPrice> getPremiumPrices() {
 		return _premiumPrices;
 	}
-	public void setPremiumPrices(ArrayList<GasPrice> premiumPrices) {
+	public void setPremiumPrices(List<GasPrice> premiumPrices) {
 		_premiumPrices = premiumPrices;
 	}
 	
-	public ArrayList<GasPrice> getDieselPrices() {
+	public List<GasPrice> getDieselPrices() {
 		return _dieselPrices;
 	}
-	public void setDieselPrices(ArrayList<GasPrice> dieselPrices) {
+	public void setDieselPrices(List<GasPrice> dieselPrices) {
 		_dieselPrices = dieselPrices;
 	}
 	
 	public void addGasPrice(GasPrice price) {
+		Date normalizedDate = normalizeDate(price.getDateSeen());
+		price.setDateSeen(normalizedDate);
 		switch(price.getGrade()) {
 			case Regular:
-				_regularPrices.add(price);
+				if(!isDateAlreadyRecorded(_regularPrices, normalizedDate))
+					_regularPrices.add(price);
 				break;
 			case Mid:
-				_midPrices.add(price);
+				if(!isDateAlreadyRecorded(_midPrices, normalizedDate))
+					_midPrices.add(price);
 				break;
 			case Premium:
-				_premiumPrices.add(price);
+				if(!isDateAlreadyRecorded(_premiumPrices, normalizedDate))
+					_premiumPrices.add(price);
 				break;
 			case Diesel:
-				_dieselPrices.add(price);
+				if(!isDateAlreadyRecorded(_dieselPrices, normalizedDate))
+					_dieselPrices.add(price);
 				break;
 		}
+	}
+	
+	private boolean isDateAlreadyRecorded(List<GasPrice> prices, Date date) {
+		for(GasPrice price : prices) {
+			if(price.getDateSeen().equals(date))
+				return true;
+		}
+		return false;
+	}
+	
+	private Date normalizeDate(Date date) {
+		return new Date(date.getYear(), date.getMonth(), date.getDay(), date.getHours(), 0);
 	}
 	
 	public float getLatestGasPrice(GasGrade grade) {
@@ -91,7 +110,7 @@ public class Station {
 		return -1;
 	}
 	
-	private float getLatestPrice(ArrayList<GasPrice> prices) {
+	private float getLatestPrice(List<GasPrice> prices) {
 		Date latestDate = new Date(1L);
 		float latestPrice = -1;
 		for(GasPrice price : prices) {
