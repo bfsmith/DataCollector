@@ -1,14 +1,19 @@
 package bs.howdy.DataCollector.Collectors.Gas.Activities;
 
+import java.text.DecimalFormat;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.achartengine.ChartFactory;
-import org.achartengine.GraphicalView;
-import org.achartengine.chart.PointStyle;
-import org.achartengine.model.TimeSeries;
-import org.achartengine.model.XYMultipleSeriesDataset;
-import org.achartengine.renderer.XYMultipleSeriesRenderer;
-import org.achartengine.renderer.XYSeriesRenderer;
+import com.androidplot.Plot;
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYStepMode;
+import com.androidplot.series.XYSeries;
+import com.androidplot.xy.*;
 import org.joda.time.DateTime;
 
 import bs.howdy.DataCollector.R;
@@ -16,15 +21,16 @@ import bs.howdy.DataCollector.Collectors.Gas.*;
 import bs.howdy.DataCollector.Collectors.Gas.Data.*;
 import android.app.*;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.os.*;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 
 public class StationInfoActivity extends Activity {
-	
-	private DateTime minDate;
-	private DateTime maxDate;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,10 +67,12 @@ public class StationInfoActivity extends Activity {
 		List<GasPrice> mid = station.getMidPrices();
 		List<GasPrice> premium = station.getPremiumPrices();
 		List<GasPrice> diesel = station.getDieselPrices();
-    	int maxLength = Math.max( 
-    			Math.max(regular.size(), mid.size()),
-    			Math.max(premium.size(), diesel.size())
-    			);
+    	
+		int maxLength = Math.max(
+					Math.max(regular.size(), mid.size()),
+					Math.max(premium.size(), diesel.size())
+				);
+		
     	for(int i = 0; i < maxLength; i++) {
     		GasPrice r = null, m = null, p = null, d = null;
     		if(regular.size() > i)
@@ -90,116 +98,6 @@ public class StationInfoActivity extends Activity {
     	}
 	}
 
-	private void createChart(Station station) {
-		HashMap<DateTime, GasPriceContainer> map = mapPrices(station);
-
-		LinearLayout layout = (LinearLayout)findViewById(R.id.chart);
-		if(map.size() == 0) {
-			layout.setVisibility(View.GONE);
-			return;
-		}
-		
-		XYMultipleSeriesDataset dataSet = getDataset(map);
-		XYMultipleSeriesRenderer renderer = getRenderer();
-		GraphicalView graph = ChartFactory.getTimeChartView(this, dataSet, renderer, "MMM d HH:mm");
-		layout.addView(graph);
-	}
-
-	private HashMap<DateTime, GasPriceContainer> mapPrices(Station station) {
-		HashMap<DateTime, GasPriceContainer> map = new HashMap<DateTime, GasPriceContainer>();
-		mapPrices(station.getRegularPrices(), map);
-		mapPrices(station.getMidPrices(), map);
-		mapPrices(station.getPremiumPrices(), map);
-		mapPrices(station.getDieselPrices(), map);
-		return map;
-	}
-
-	private void mapPrices(List<GasPrice> prices, HashMap<DateTime, GasPriceContainer> map) {
-		for(GasPrice price : prices) {
-			GasPriceContainer container = map.containsKey(price.getDateSeen())
-				? map.get(price.getDateSeen())
-				: new GasPriceContainer();
-			container.setPrice(price);
-			map.put(price.getDateSeen(), container);
-		}
-	}
-	
-	private <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
-	  List<T> list = new ArrayList<T>(c);
-	  java.util.Collections.sort(list);
-	  return list;
-	}
-	
-	private XYMultipleSeriesDataset getDataset(HashMap<DateTime, GasPriceContainer> map) {
-	    List<DateTime> sortedDates = asSortedList(map.keySet());
-	    List<GasPriceContainer> prices = new ArrayList<GasPriceContainer>(sortedDates.size());
-	    
-	    minDate = sortedDates.get(0);
-	    maxDate = sortedDates.get(sortedDates.size() - 1);
-	    
-	    for(DateTime date : sortedDates) {
-	    	prices.add(map.get(date));
-	    }
-
-	    XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-	    dataset.addSeries(getSeries(prices, GasGrade.Regular, getString(R.string.Regular)));
-	    dataset.addSeries(getSeries(prices, GasGrade.Mid, getString(R.string.Mid)));
-	    dataset.addSeries(getSeries(prices, GasGrade.Premium, getString(R.string.Premium)));
-	    dataset.addSeries(getSeries(prices, GasGrade.Diesel, getString(R.string.Diesel)));
-	    
-	    return dataset;
-	  }
-	
-	private TimeSeries getSeries(List<GasPriceContainer> containers, GasGrade grade, String name) {
-		TimeSeries series = new TimeSeries(name);
-		for(GasPriceContainer container : containers) {
-			GasPrice price = container.getPrice(grade);
-			if(price != null) {
-				Date d = price.getDateSeen().toDate();
-				series.add(d, (double)price.getPrice());
-			}
-		}
-		return series;
-	}
-
-	private XYMultipleSeriesRenderer getRenderer() {
-	    XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
-	    renderer.setAxisTitleTextSize(16);
-	    renderer.setChartTitleTextSize(20);
-	    renderer.setLabelsTextSize(15);
-	    renderer.setLegendTextSize(15);
-	    renderer.setPointSize(5f);
-	    renderer.setMargins(new int[] {20, 30, 15, 0});
-	    XYSeriesRenderer r = new XYSeriesRenderer();
-		    r.setColor(Color.BLUE);
-		    r.setPointStyle(PointStyle.SQUARE);
-		    r.setFillPoints(true);
-		    r.setDisplayChartValues(true);
-	    renderer.addSeriesRenderer(r);
-	    r = new XYSeriesRenderer();
-		    r.setPointStyle(PointStyle.CIRCLE);
-		    r.setColor(Color.GREEN);
-		    r.setFillPoints(true);
-		    r.setDisplayChartValues(true);
-	    renderer.addSeriesRenderer(r);
-	    r = new XYSeriesRenderer();
-		    r.setColor(Color.RED);
-		    r.setPointStyle(PointStyle.DIAMOND);
-		    r.setFillPoints(true);
-		    r.setDisplayChartValues(true);
-	    renderer.addSeriesRenderer(r);
-	    r = new XYSeriesRenderer();
-		    r.setPointStyle(PointStyle.TRIANGLE);
-		    r.setColor(Color.WHITE);
-		    r.setFillPoints(true);
-		    r.setDisplayChartValues(true);
-	    renderer.addSeriesRenderer(r);
-	    renderer.setAxesColor(Color.DKGRAY);
-	    renderer.setLabelsColor(Color.LTGRAY);
-	    
-	    return renderer;
-	}
-
 	private void addTextView(TableRow row, float price) {
 		TextView tv = new TextView(this);
 		if(price > 0) 
@@ -210,33 +108,84 @@ public class StationInfoActivity extends Activity {
         row.addView(tv);
 	}
 	
-	private class GasPriceContainer {
-		public GasPrice Regular = null;
-		public GasPrice Mid = null;
-		public GasPrice Premium = null;
-		public GasPrice Diesel = null;
-		
-		public void setPrice(GasPrice price) {
-			switch(price.getGrade()) {
-				case Regular: Regular = price;
-					break;
-				case Mid: Mid = price;
-					break;
-				case Premium: Premium = price;
-					break;
-				case Diesel: Diesel = price;
-					break;
-			}
-		}
-		
-		public GasPrice getPrice(GasGrade grade) {
-			switch(grade) {
-				case Regular: return Regular;
-				case Mid: return Mid;
-				case Premium: return Premium;
-				case Diesel: return Diesel;
-			}
-			return null;
-		}
+	private void createChart(Station station) {
+		XYPlot plot = (XYPlot) findViewById(R.id.chart);
+		setupChart(plot);
+		addSeries(plot, station);
 	}
+	
+	private void setupChart(XYPlot plot) {
+		plot.getGraphWidget().getGridBackgroundPaint().setColor(Color.WHITE);
+        plot.getGraphWidget().getGridLinePaint().setColor(Color.BLACK);
+        plot.getGraphWidget().getGridLinePaint().setPathEffect(new DashPathEffect(new float[]{1,1}, 1));
+        plot.getGraphWidget().getDomainOriginLinePaint().setColor(Color.BLACK);
+        plot.getGraphWidget().getRangeOriginLinePaint().setColor(Color.BLACK);
+ 
+        plot.setBorderStyle(Plot.BorderStyle.SQUARE, null, null);
+        plot.getBorderPaint().setStrokeWidth(1);
+        plot.getBorderPaint().setAntiAlias(false);
+        plot.getBorderPaint().setColor(Color.WHITE);
+        plot.getGraphWidget().setPaddingRight(2);
+        
+        // draw a domain tick for each day
+        plot.setDomainStep(XYStepMode.INCREMENT_BY_VAL, 86400000d);
+        plot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, .1d);
+ 
+        // customize our domain/range labels
+        plot.setDomainLabel(getResources().getString(R.string.Date));
+        plot.setRangeLabel(getResources().getString(R.string.Price));
+ 
+        // get rid of decimal points in our range labels:
+        plot.setRangeValueFormat(new DecimalFormat("$0.00"));
+        plot.setDomainValueFormat(new MyDateFormat());
+ 
+        // by default, AndroidPlot displays developer guides to aid in laying out your plot.
+        // To get rid of them call disableAllMarkup():
+        plot.disableAllMarkup();
+	}
+	
+	private void addSeries(XYPlot plot, Station station) {
+        plot.addSeries(getSeries(station.getRegularPrices(), getResources().getString(R.string.Regular)), getFormatter(0));
+        plot.addSeries(getSeries(station.getMidPrices(), getResources().getString(R.string.Mid)), getFormatter(1));
+        plot.addSeries(getSeries(station.getPremiumPrices(), getResources().getString(R.string.Premium)), getFormatter(2));
+        plot.addSeries(getSeries(station.getDieselPrices(), getResources().getString(R.string.Diesel)), getFormatter(3));
+	}
+	
+	private LineAndPointFormatter getFormatter(int index) {
+		LineAndPointFormatter formatter = new LineAndPointFormatter(Constants.Colors[index], Constants.Colors[index], Color.TRANSPARENT);
+		Paint paint = formatter.getLinePaint();
+		paint.setStrokeWidth(3);
+		formatter.setLinePaint(paint);
+		return formatter;
+	}
+	
+	private XYSeries getSeries(List<GasPrice> gasPrices, String title) {
+		List<Long> dates = new ArrayList<Long>(gasPrices.size());
+		List<Float> prices = new ArrayList<Float>(gasPrices.size());
+		
+		for(GasPrice gasPrice : gasPrices) {
+			dates.add(gasPrice.getDateSeen().getMillis());
+			prices.add(gasPrice.getPrice());
+		}
+		return new SimpleXYSeries(dates, prices, title);
+	}
+	
+    @SuppressWarnings("serial")
+	private class MyDateFormat extends Format {
+            private SimpleDateFormat dateFormat = new SimpleDateFormat("EE, MMM  d");
+            
+            @Override
+            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+                long timestamp = ((Number) obj).longValue();
+                Date date = new Date(timestamp);
+                return dateFormat.format(date, toAppendTo, pos);
+            }
+ 
+            @Override
+            public Object parseObject(String source, ParsePosition pos) {
+                return null;
+            }
+ 
+    }
+
 }

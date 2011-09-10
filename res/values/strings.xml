@@ -7,4 +7,6 @@
     <string name="Mid">Mid</string>
     <string name="Premium">Premium</string>
     <string name="Diesel">Diesel</string>
+    <string name="Date">Date</string>
+    <string name="Price">Price</string>
 </resources>
