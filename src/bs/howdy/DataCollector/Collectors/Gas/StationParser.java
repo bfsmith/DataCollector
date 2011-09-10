@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -66,8 +67,9 @@ public class StationParser {
 	private float getFloatValue(Element ele, String tagName) {
 		return Float.parseFloat(getTextValue(ele,tagName));
 	}
-	private Date getDateValue(Element ele, String tagName) throws ParseException {
-		return XML_DATE_FORMAT.parse(getTextValue(ele,tagName));
+	private DateTime getDateValue(Element ele, String tagName) throws ParseException {
+		Date d = XML_DATE_FORMAT.parse(getTextValue(ele,tagName));
+		return new DateTime(d.getTime());
 	}
 	private boolean getBooleanValue(Element ele, String tagName) {
 		return Boolean.parseBoolean(getTextValue(ele,tagName));
@@ -96,7 +98,7 @@ public class StationParser {
 	
 	private GasPrice parseGasPrice(Element stationElement, GasGrade grade) {
 		float price;
-		Date date;
+		DateTime date;
 		try {
 			boolean hasPrice = getBooleanValue(stationElement, grade.getHasPriceTag());
 			if(!hasPrice) return null;
@@ -108,6 +110,12 @@ public class StationParser {
 			return null;
 		}
 		
-		return new GasPrice(grade, price, date);
+		try {
+			return new GasPrice(grade, price, date);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

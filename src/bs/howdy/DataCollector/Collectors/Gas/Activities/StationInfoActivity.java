@@ -1,10 +1,6 @@
 package bs.howdy.DataCollector.Collectors.Gas.Activities;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -13,6 +9,7 @@ import org.achartengine.model.TimeSeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
+import org.joda.time.DateTime;
 
 import bs.howdy.DataCollector.R;
 import bs.howdy.DataCollector.Collectors.Gas.*;
@@ -20,10 +17,14 @@ import bs.howdy.DataCollector.Collectors.Gas.Data.*;
 import android.app.*;
 import android.graphics.Color;
 import android.os.*;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 
 public class StationInfoActivity extends Activity {
+	
+	private DateTime minDate;
+	private DateTime maxDate;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,16 +91,22 @@ public class StationInfoActivity extends Activity {
 	}
 
 	private void createChart(Station station) {
-		HashMap<Date, GasPriceContainer> map = mapPrices(station);
-		XYMultipleSeriesDataset dataSet = getDataset(map);
-		
-		GraphicalView graph = ChartFactory.getLineChartView(this, dataSet, getRenderer());
+		HashMap<DateTime, GasPriceContainer> map = mapPrices(station);
+
 		LinearLayout layout = (LinearLayout)findViewById(R.id.chart);
+		if(map.size() == 0) {
+			layout.setVisibility(View.GONE);
+			return;
+		}
+		
+		XYMultipleSeriesDataset dataSet = getDataset(map);
+		XYMultipleSeriesRenderer renderer = getRenderer();
+		GraphicalView graph = ChartFactory.getTimeChartView(this, dataSet, renderer, "MMM d HH:mm");
 		layout.addView(graph);
 	}
 
-	private HashMap<Date, GasPriceContainer> mapPrices(Station station) {
-		HashMap<Date, GasPriceContainer> map = new HashMap<Date, GasPriceContainer>();
+	private HashMap<DateTime, GasPriceContainer> mapPrices(Station station) {
+		HashMap<DateTime, GasPriceContainer> map = new HashMap<DateTime, GasPriceContainer>();
 		mapPrices(station.getRegularPrices(), map);
 		mapPrices(station.getMidPrices(), map);
 		mapPrices(station.getPremiumPrices(), map);
@@ -107,7 +114,7 @@ public class StationInfoActivity extends Activity {
 		return map;
 	}
 
-	private void mapPrices(List<GasPrice> prices, HashMap<Date, GasPriceContainer> map) {
+	private void mapPrices(List<GasPrice> prices, HashMap<DateTime, GasPriceContainer> map) {
 		for(GasPrice price : prices) {
 			GasPriceContainer container = map.containsKey(price.getDateSeen())
 				? map.get(price.getDateSeen())
@@ -123,11 +130,14 @@ public class StationInfoActivity extends Activity {
 	  return list;
 	}
 	
-	private XYMultipleSeriesDataset getDataset(HashMap<Date, GasPriceContainer> map) {
-	    List<Date> sortedDates = asSortedList(map.keySet());
+	private XYMultipleSeriesDataset getDataset(HashMap<DateTime, GasPriceContainer> map) {
+	    List<DateTime> sortedDates = asSortedList(map.keySet());
 	    List<GasPriceContainer> prices = new ArrayList<GasPriceContainer>(sortedDates.size());
 	    
-	    for(Date date : sortedDates) {
+	    minDate = sortedDates.get(0);
+	    maxDate = sortedDates.get(sortedDates.size() - 1);
+	    
+	    for(DateTime date : sortedDates) {
 	    	prices.add(map.get(date));
 	    }
 
@@ -144,7 +154,10 @@ public class StationInfoActivity extends Activity {
 		TimeSeries series = new TimeSeries(name);
 		for(GasPriceContainer container : containers) {
 			GasPrice price = container.getPrice(grade);
-			series.add(price.getDateSeen(), (double)price.getPrice());
+			if(price != null) {
+				Date d = price.getDateSeen().toDate();
+				series.add(d, (double)price.getPrice());
+			}
 		}
 		return series;
 	}
@@ -161,23 +174,29 @@ public class StationInfoActivity extends Activity {
 		    r.setColor(Color.BLUE);
 		    r.setPointStyle(PointStyle.SQUARE);
 		    r.setFillPoints(true);
+		    r.setDisplayChartValues(true);
 	    renderer.addSeriesRenderer(r);
 	    r = new XYSeriesRenderer();
 		    r.setPointStyle(PointStyle.CIRCLE);
 		    r.setColor(Color.GREEN);
 		    r.setFillPoints(true);
+		    r.setDisplayChartValues(true);
+	    renderer.addSeriesRenderer(r);
 	    r = new XYSeriesRenderer();
 		    r.setColor(Color.RED);
 		    r.setPointStyle(PointStyle.DIAMOND);
 		    r.setFillPoints(true);
+		    r.setDisplayChartValues(true);
 	    renderer.addSeriesRenderer(r);
 	    r = new XYSeriesRenderer();
 		    r.setPointStyle(PointStyle.TRIANGLE);
 		    r.setColor(Color.WHITE);
 		    r.setFillPoints(true);
+		    r.setDisplayChartValues(true);
 	    renderer.addSeriesRenderer(r);
 	    renderer.setAxesColor(Color.DKGRAY);
 	    renderer.setLabelsColor(Color.LTGRAY);
+	    
 	    return renderer;
 	}
 

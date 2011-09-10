@@ -1,8 +1,9 @@
 package bs.howdy.DataCollector.Collectors.Gas;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 public class Station {
 	private int _id;
@@ -62,38 +63,32 @@ public class Station {
 	}
 	
 	public void addGasPrice(GasPrice price) {
-		Date normalizedDate = normalizeDate(price.getDateSeen());
-		price.setDateSeen(normalizedDate);
 		switch(price.getGrade()) {
 			case Regular:
-				if(!isDateAlreadyRecorded(_regularPrices, normalizedDate))
+				if(!isDateAlreadyRecorded(_regularPrices, price.getDateSeen()))
 					_regularPrices.add(price);
 				break;
 			case Mid:
-				if(!isDateAlreadyRecorded(_midPrices, normalizedDate))
+				if(!isDateAlreadyRecorded(_midPrices, price.getDateSeen()))
 					_midPrices.add(price);
 				break;
 			case Premium:
-				if(!isDateAlreadyRecorded(_premiumPrices, normalizedDate))
+				if(!isDateAlreadyRecorded(_premiumPrices, price.getDateSeen()))
 					_premiumPrices.add(price);
 				break;
 			case Diesel:
-				if(!isDateAlreadyRecorded(_dieselPrices, normalizedDate))
+				if(!isDateAlreadyRecorded(_dieselPrices, price.getDateSeen()))
 					_dieselPrices.add(price);
 				break;
 		}
 	}
 	
-	private boolean isDateAlreadyRecorded(List<GasPrice> prices, Date date) {
+	private boolean isDateAlreadyRecorded(List<GasPrice> prices, DateTime date) {
 		for(GasPrice price : prices) {
 			if(price.getDateSeen().equals(date))
 				return true;
 		}
 		return false;
-	}
-	
-	private Date normalizeDate(Date date) {
-		return new Date(date.getYear(), date.getMonth(), date.getDay(), date.getHours(), 0);
 	}
 	
 	public float getLatestGasPrice(GasGrade grade) {
@@ -111,10 +106,10 @@ public class Station {
 	}
 	
 	private float getLatestPrice(List<GasPrice> prices) {
-		Date latestDate = new Date(1L);
+		DateTime latestDate = new DateTime(1L);
 		float latestPrice = -1;
 		for(GasPrice price : prices) {
-			if(price.getDateSeen().compareTo(latestDate) > 0) {
+			if(price.getDateSeen().isAfter(latestDate)) {
 				latestDate = price.getDateSeen();
 				latestPrice = price.getPrice();
 			}

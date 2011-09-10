@@ -101,7 +101,7 @@ public class ChartDemo extends ListActivity {
     for (int i = 0; i < SERIES_NR; i++) {
       TimeSeries series = new TimeSeries("Demo series " + (i + 1));
       for (int k = 0; k < nr; k++) {
-        series.add(new Date(value + k * TimeChart.DAY / 4), 20 + r.nextInt() % 100);
+        series.add(new Date(value + (k) * TimeChart.DAY / 4), 20 + r.nextInt() % 100);
       }
       dataset.addSeries(series);
     }

@@ -1,32 +1,33 @@
 package bs.howdy.DataCollector.Collectors.Gas.Data;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
-import bs.howdy.DataCollector.Collectors.Gas.GasGrade;
-import bs.howdy.DataCollector.Collectors.Gas.GasPrice;
-import bs.howdy.DataCollector.Collectors.Gas.Station;
-import bs.howdy.DataCollector.Collectors.Gas.StationFactory;
+import org.joda.time.DateTime;
+
+import bs.howdy.DataCollector.Collectors.Gas.*;
 
 public class DataProvider implements IDataProvider {
 	private static DataProvider _instance;
 	private HashMap<Integer, Station> _stations;
+	private Random r;
 
 	private DataProvider() 
 	{ 
 		_stations = new HashMap<Integer, Station>();
+		r = new Random();
 		feedData();
 	}
 	
 	private void feedData() {
 		StationFactory factory = StationFactory.getInstance();
+		DateTime d = new DateTime(2011, 8, 29, 0, 0);
 		for(int i = 1; i <= 3; i++) {
 			Station station = factory.getStation(i, "Station" + i, "Location" + i);
 			for(int j = 0; j < 3; j++) {
 				for(GasGrade grade : GasGrade.values()) {
-					station.addGasPrice(new GasPrice(grade, 3.2f, new Date()));
+					station.addGasPrice(new GasPrice(grade, r.nextFloat() + 3, d));
 				}
+				d = d.plusHours(1);
 			}
 			addStation(station);
 		}
