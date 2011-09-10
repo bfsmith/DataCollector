@@ -1,4 +1,4 @@
-package bs.howdy.DataCollector.Collectors.Gas;
+package bs.howdy.DataCollector.Collectors.Gas.Data;
 
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -10,6 +10,8 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import bs.howdy.DataCollector.Collectors.Gas.Constants;
 
 import android.util.Base64;
 

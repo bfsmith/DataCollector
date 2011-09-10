@@ -1,4 +1,4 @@
-package bs.howdy.DataCollector.Collectors.Gas;
+package bs.howdy.DataCollector.Collectors.Gas.Data;
 
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
@@ -13,21 +13,30 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import bs.howdy.DataCollector.Collectors.Gas.Constants;
+import bs.howdy.DataCollector.Collectors.Gas.GasGrade;
+import bs.howdy.DataCollector.Collectors.Gas.GasPrice;
+import bs.howdy.DataCollector.Collectors.Gas.Station;
+
 import android.util.Log;
 
-public class StationParser {
+public class StationFeedParser {
 	private DocumentBuilderFactory xmlFactory;
 	private final SimpleDateFormat XML_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:MM:ss.SSS");
+	private StationDataProvider gdp;
+	private GasPriceDataProvider gpdp; 
 	
-	private static StationParser _instance;
+	private static StationFeedParser _instance;
 	
-	private StationParser() {
+	private StationFeedParser() {
 		xmlFactory = DocumentBuilderFactory.newInstance();
+		gdp = StationDataProvider.getInstance();
+		gpdp = GasPriceDataProvider.getInstance();
 	}
 	
-	public static StationParser getInstance() {
+	public static StationFeedParser getInstance() {
 		if(_instance == null)
-			_instance = new StationParser();
+			_instance = new StationFeedParser();
 		return _instance;
 	}
 	
@@ -79,16 +88,22 @@ public class StationParser {
 		StationFactory stationFactory = StationFactory.getInstance();
 		
 		int id = getIntValue(stationElement, "StationId");
-		String name = getTextValue(stationElement, "StationName");
-		String location = getTextValue(stationElement, "Address") + " " +
-				getTextValue(stationElement, "City") + " " +
-				getTextValue(stationElement, "State") + " " +
-				getTextValue(stationElement, "PostalCode");
-		Station station = stationFactory.getStation(id, name, location);
+		
+		Station station = gdp.getStation(id);
+		
+		if(station == null) {
+			String name = getTextValue(stationElement, "StationName");
+			String location = getTextValue(stationElement, "Address") + " " +
+					getTextValue(stationElement, "City") + " " +
+					getTextValue(stationElement, "State") + " " +
+					getTextValue(stationElement, "PostalCode");
+			station = stationFactory.createStation(id, name, location);
+		}
 		
 		for(GasGrade grade : GasGrade.values()) {
-			GasPrice price = parseGasPrice(stationElement, grade);
-			if(price != null) {
+			GasPrice price = parseGasPrice(stationElement, grade, id);
+			if(price != null && !gpdp.isAlreadyRecorded(price)) {
+				gpdp.addGasPrice(price);
 				station.addGasPrice(price);
 			}
 		}
@@ -96,7 +111,7 @@ public class StationParser {
 		return station;
 	}
 	
-	private GasPrice parseGasPrice(Element stationElement, GasGrade grade) {
+	private GasPrice parseGasPrice(Element stationElement, GasGrade grade, int stationId) {
 		float price;
 		DateTime date;
 		try {
@@ -111,7 +126,7 @@ public class StationParser {
 		}
 		
 		try {
-			return new GasPrice(grade, price, date);
+			return new GasPrice(stationId, grade, price, date);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,4 +1,6 @@
-package bs.howdy.DataCollector.Collectors.Gas;
+package bs.howdy.DataCollector.Collectors.Gas.Data;
+
+import bs.howdy.DataCollector.Collectors.Gas.Station;
 
 public class StationFactory {
 	private static StationFactory _instance = null;
@@ -13,8 +15,7 @@ public class StationFactory {
 		return _instance;
 	}
 	
-	public Station getStation(int id, String name, String location) {
-		// Look up the id and return the station if we already have it
+	public Station createStation(int id, String name, String location) {
 		return new Station(id, name, location);
 	}
 }

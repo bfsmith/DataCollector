@@ -47,9 +47,7 @@ public class GasCollector extends BaseDataCollector {
 	public void results(Object obj) {
 		if(obj == null || !(obj instanceof String))
 			return;
-		StationParser parser = StationParser.getInstance();
-		Station station = parser.parseStationResponse((String)obj);
-		IDataProvider dp = DataProvider.getInstance();
-		dp.updateStation(station);
+		StationFeedParser parser = StationFeedParser.getInstance();
+		parser.parseStationResponse((String)obj);
 	}
 }

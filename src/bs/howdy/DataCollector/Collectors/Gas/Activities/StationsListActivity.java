@@ -15,14 +15,14 @@ import android.widget.ListView;
 
 public class StationsListActivity extends ListActivity {
 
-	private IDataProvider dp;
+	private StationDataProvider dp;
 	
 	@Override
 	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.station_list);
 		
-		dp = DataProvider.getInstance();
+		dp = StationDataProvider.getInstance();
 		ArrayList<String> stations = new ArrayList<String>();
 		for(Station s : dp.getStations()) {
 			stations.add(String.valueOf(s.getId()));

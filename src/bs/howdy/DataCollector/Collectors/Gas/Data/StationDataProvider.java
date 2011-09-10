@@ -6,12 +6,12 @@ import org.joda.time.DateTime;
 
 import bs.howdy.DataCollector.Collectors.Gas.*;
 
-public class DataProvider implements IDataProvider {
-	private static DataProvider _instance;
+public class StationDataProvider {
+	private static StationDataProvider _instance;
 	private HashMap<Integer, Station> _stations;
 	private Random r;
 
-	private DataProvider() 
+	private StationDataProvider() 
 	{ 
 		_stations = new HashMap<Integer, Station>();
 		r = new Random();
@@ -22,10 +22,10 @@ public class DataProvider implements IDataProvider {
 		StationFactory factory = StationFactory.getInstance();
 		DateTime d = new DateTime(2011, 8, 29, 0, 0);
 		for(int i = 1; i <= 3; i++) {
-			Station station = factory.getStation(i, "Station" + i, "Location" + i);
+			Station station = factory.createStation(i, "Station" + i, "Location" + i);
 			for(int j = 0; j < 3; j++) {
 				for(GasGrade grade : GasGrade.values()) {
-					station.addGasPrice(new GasPrice(grade, r.nextFloat() + 3, d));
+					station.addGasPrice(new GasPrice(station.getId(), grade, r.nextFloat() + 3, d));
 				}
 				d = d.plusHours(1);
 			}
@@ -33,9 +33,9 @@ public class DataProvider implements IDataProvider {
 		}
 	}
 	
-	public static DataProvider getInstance() {
+	public static StationDataProvider getInstance() {
 		if(_instance == null)
-			_instance = new DataProvider();
+			_instance = new StationDataProvider();
 		return _instance;
 	}
 	

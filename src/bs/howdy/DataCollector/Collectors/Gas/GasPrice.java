@@ -3,14 +3,24 @@ package bs.howdy.DataCollector.Collectors.Gas;
 import org.joda.time.DateTime;
 
 public class GasPrice {
+	private int _stationId;
 	private GasGrade _grade;
 	private float _price;
 	private DateTime _dateSeen;
 	
-	public GasPrice(GasGrade grade, float price, DateTime seen) {
+	public GasPrice(int stationId, GasGrade grade, float price, DateTime seen) {
+		setStationId(stationId);
 		setGrade(grade);
 		setPrice(price);
 		setDateSeen(seen);
+	}
+
+	public int getStationId() {
+		return _stationId;
+	}
+
+	public void setStationId(int stationId) {
+		_stationId = stationId;
 	}
 
 	public GasGrade getGrade() {

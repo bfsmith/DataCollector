@@ -13,8 +13,6 @@ import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYStepMode;
 import com.androidplot.series.XYSeries;
-import com.androidplot.xy.*;
-import org.joda.time.DateTime;
 
 import bs.howdy.DataCollector.R;
 import bs.howdy.DataCollector.Collectors.Gas.*;
@@ -22,11 +20,8 @@ import bs.howdy.DataCollector.Collectors.Gas.Data.*;
 import android.app.*;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Shader;
 import android.os.*;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 
@@ -43,7 +38,7 @@ public class StationInfoActivity extends Activity {
         }
 
     	int id = extras.getInt(Constants.Extras.ID);
-    	IDataProvider dp = DataProvider.getInstance();
+    	StationDataProvider dp = StationDataProvider.getInstance();
     	Station station = dp.getStation(id);
     	
     	if(station == null) {
