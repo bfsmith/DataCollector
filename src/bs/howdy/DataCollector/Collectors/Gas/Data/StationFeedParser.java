@@ -22,7 +22,7 @@ import android.util.Log;
 
 public class StationFeedParser {
 	private DocumentBuilderFactory xmlFactory;
-	private final SimpleDateFormat XML_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:MM:ss.SSS");
+	private final SimpleDateFormat XML_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); // 2011-09-11T02:26:03.007
 	private StationDataProvider gdp;
 	private GasPriceDataProvider gpdp; 
 	
@@ -112,18 +112,14 @@ public class StationFeedParser {
 			if(!hasPrice) return null;
 			
 			price = getFloatValue(stationElement, grade.getPriceTag());
+			if(price <= 0)
+				return null;
 			date = getDateValue(stationElement, grade.getDateTag());
 		} catch (Exception ex) {
 			Log.e(bs.howdy.DataCollector.Constants.TAG, "Unable to parse a station tag... ");
 			return null;
 		}
 		
-		try {
-			return new GasPrice(stationId, grade, price, date);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return new GasPrice(stationId, grade, price, date);
 	}
 }

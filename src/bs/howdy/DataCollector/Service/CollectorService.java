@@ -35,7 +35,7 @@ public class CollectorService extends Service {
 			CollectorTask task = new CollectorTask(collector);
 		 
 		    Timer timer = new Timer();
-		    timer.schedule(task, 0, 3600000L);
+		    timer.schedule(task, 1000L, 3600000L); // Every hour
 		    _timers.add(timer);
 		}
 		

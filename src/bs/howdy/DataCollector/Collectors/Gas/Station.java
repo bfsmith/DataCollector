@@ -38,20 +38,23 @@ public class Station {
 		return _regularPrices;
 	}
 	public void setRegularPrices(List<GasPrice> regularPrices) {
-		_regularPrices = regularPrices;
+		if(regularPrices != null)
+			_regularPrices = regularPrices;
 	}
 	
 	public List<GasPrice> getMidPrices() {
 		return _midPrices;
 	}
 	public void setMidPrices(List<GasPrice> midPrices) {
-		_midPrices = midPrices;
+		if(midPrices != null)
+			_midPrices = midPrices;
 	}
 	
 	public List<GasPrice> getPremiumPrices() {
 		return _premiumPrices;
 	}
 	public void setPremiumPrices(List<GasPrice> premiumPrices) {
+		if(premiumPrices != null)
 		_premiumPrices = premiumPrices;
 	}
 	
@@ -59,7 +62,8 @@ public class Station {
 		return _dieselPrices;
 	}
 	public void setDieselPrices(List<GasPrice> dieselPrices) {
-		_dieselPrices = dieselPrices;
+		if(dieselPrices != null)
+			_dieselPrices = dieselPrices;
 	}
 	
 	public void addGasPrice(GasPrice price) {

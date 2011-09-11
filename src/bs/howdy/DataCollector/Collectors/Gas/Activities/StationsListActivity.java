@@ -24,7 +24,7 @@ public class StationsListActivity extends ListActivity {
 		dp = StationDataProvider.getInstance();
 		ArrayList<String> stations = new ArrayList<String>();
 		for(Station s : dp.getStations()) {
-			stations.add(String.valueOf(s.getName()));
+			stations.add(String.valueOf(s.getId()));
 		}
 		
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stations));

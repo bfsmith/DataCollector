@@ -20,7 +20,7 @@ public class DataCollectorMainActivity extends Activity {
     
     @Override
     public void onDestroy() {
-    	stopService(new Intent(CollectorService.class.getName()));
+    	//stopService(new Intent(CollectorService.class.getName()));
     	super.onDestroy();
     }
     

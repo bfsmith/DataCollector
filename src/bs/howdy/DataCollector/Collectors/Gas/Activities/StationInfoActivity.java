@@ -140,10 +140,15 @@ public class StationInfoActivity extends Activity {
 	}
 	
 	private void addSeries(XYPlot plot, Station station) {
-        plot.addSeries(getSeries(station.getRegularPrices(), getResources().getString(R.string.Regular)), getFormatter(0));
-        plot.addSeries(getSeries(station.getMidPrices(), getResources().getString(R.string.Mid)), getFormatter(1));
-        plot.addSeries(getSeries(station.getPremiumPrices(), getResources().getString(R.string.Premium)), getFormatter(2));
-        plot.addSeries(getSeries(station.getDieselPrices(), getResources().getString(R.string.Diesel)), getFormatter(3));
+		int counter = 0;
+		if(station.getRegularPrices().size() > 0)
+			plot.addSeries(getSeries(station.getRegularPrices(), getResources().getString(R.string.Regular)), getFormatter(counter++));
+		if(station.getMidPrices().size() > 0)
+			plot.addSeries(getSeries(station.getMidPrices(), getResources().getString(R.string.Mid)), getFormatter(counter++));
+		if(station.getPremiumPrices().size() > 0)
+			plot.addSeries(getSeries(station.getPremiumPrices(), getResources().getString(R.string.Premium)), getFormatter(counter++));
+		if(station.getDieselPrices().size() > 0)
+			plot.addSeries(getSeries(station.getDieselPrices(), getResources().getString(R.string.Diesel)), getFormatter(counter++));
 	}
 	
 	private LineAndPointFormatter getFormatter(int index) {
