@@ -49,5 +49,7 @@ public class GasCollector extends BaseDataCollector {
 			return;
 		StationFeedParser parser = StationFeedParser.getInstance();
 		parser.parseStationResponse((String)obj);
+		
+		Log.i(Constants.TAG, "Parsed gas station results.");
 	}
 }

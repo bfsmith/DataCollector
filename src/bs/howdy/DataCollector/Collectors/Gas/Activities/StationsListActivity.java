@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 
 public class StationsListActivity extends ListActivity {
-
 	private StationDataProvider dp;
 	
 	@Override

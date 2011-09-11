@@ -9,11 +9,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 public class CollectorService extends Service {
-
-	private Timer timer;
-	//private ArrayList<IDataCollector> _collectors;
+	private List<Timer> _timers;
+	private List<BaseDataCollector> _collectors;
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -26,23 +26,35 @@ public class CollectorService extends Service {
 		super.onCreate();
 		Log.i(Constants.TAG, "Service creating");
 		
-//		_collectors = new ArrayList<IDataCollector>();
-//		_collectors.add();
-		GasCollector gc = new GasCollector();
-		CollectorTask task = new CollectorTask(gc);
-	 
-	    timer = new Timer();
-	    timer.schedule(task, 1000L, 15000L);
+		_collectors = new ArrayList<BaseDataCollector>();
+		_timers = new ArrayList<Timer>();
+		
+		_collectors.add(new GasCollector());
+		
+		for(BaseDataCollector collector : _collectors) {
+			CollectorTask task = new CollectorTask(collector);
+		 
+		    Timer timer = new Timer();
+		    timer.schedule(task, 0, 3600000L);
+		    _timers.add(timer);
+		}
+		
+		Toast.makeText(this, "Collector Service started.", Toast.LENGTH_SHORT).show();
 	}
 	 
 	@Override
 	public void onDestroy() {
-	    super.onDestroy();
 	    Log.i(Constants.TAG, "Service destroying");
 	 
-	    Timer temp = timer;
-	    timer = null;
-	    if(temp != null)
-	    	temp.cancel();
+	    for(Timer timer : _timers) {
+	    	Timer temp = timer;
+		    timer = null;
+		    if(temp != null)
+		    	temp.cancel();
+	    }
+	    
+	    Toast.makeText(this, "Collector Service stopped.", Toast.LENGTH_SHORT).show();
+
+	    super.onDestroy();
 	}
 }

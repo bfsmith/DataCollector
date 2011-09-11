@@ -22,4 +22,12 @@ public enum GasGrade {
 	public String getHasPriceTag() { return hasPriceTag; }
 	public String getPriceTag() { return priceTag; }
 	public String getDateTag() { return dateTag; }
+	
+	public static GasGrade getGrade(int value) {
+		for(GasGrade grade : GasGrade.values()) {
+			if(grade.ordinal() == value)
+				return grade;
+		}
+		return GasGrade.Regular;
+	}
 }

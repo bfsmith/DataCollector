@@ -40,24 +40,19 @@ public class StationFeedParser {
 		return _instance;
 	}
 	
-	public Station parseStationResponse(String response) {
+	public void parseStationResponse(String response) {
 		try {
 			DocumentBuilder db = xmlFactory.newDocumentBuilder();
 			Document doc = db.parse(new ByteArrayInputStream(response.getBytes(Constants.CHARSET)));
 			Element docEle = doc.getDocumentElement();
 			
-			//Log.i(Constants.TAG, docEle.getLocalName());
 			NodeList stations = docEle.getElementsByTagName("Station");
 			if(stations != null && stations.getLength() > 0) {
 				Element stationElement = (Element)stations.item(0);
-				Station station = parseStation(stationElement);
-				return station;
-			}
-			
+				parseStation(stationElement);
+			}	
 		} catch (Exception e) {
-		} 
-
-		return null;
+		}
 	}
 	
 	private String getTextValue(Element ele, String tagName) {
@@ -84,7 +79,7 @@ public class StationFeedParser {
 		return Boolean.parseBoolean(getTextValue(ele,tagName));
 	}
 	
-	private Station parseStation(Element stationElement) {
+	private void parseStation(Element stationElement) {
 		StationFactory stationFactory = StationFactory.getInstance();
 		
 		int id = getIntValue(stationElement, "StationId");
@@ -98,17 +93,15 @@ public class StationFeedParser {
 					getTextValue(stationElement, "State") + " " +
 					getTextValue(stationElement, "PostalCode");
 			station = stationFactory.createStation(id, name, location);
+			gdp.addStation(station);
 		}
 		
 		for(GasGrade grade : GasGrade.values()) {
 			GasPrice price = parseGasPrice(stationElement, grade, id);
 			if(price != null && !gpdp.isAlreadyRecorded(price)) {
 				gpdp.addGasPrice(price);
-				station.addGasPrice(price);
 			}
 		}
-		
-		return station;
 	}
 	
 	private GasPrice parseGasPrice(Element stationElement, GasGrade grade, int stationId) {

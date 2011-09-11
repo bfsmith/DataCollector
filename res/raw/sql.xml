@@ -1,0 +1,24 @@
+<sql>
+	<schemaPatch>
+		<patch number="1">
+			CREATE TABLE IF NOT EXISTS schema_patches (patch INTEGER PRIMARY KEY);
+		</patch>
+		<patch number="2">
+			CREATE TABLE IF NOT EXISTS gas_stations (
+				_id INTEGER PRIMARY KEY NOT NULL, 
+				name TEXT NOT NULL, 
+				location TEXT NOT NULL
+				);
+		</patch>
+		<patch number="3">
+			CREATE TABLE IF NOT EXISTS gas_prices (
+				_id INTEGER PRIMARY KEY AUTOINCREMENT,
+				station_id INTEGER NOT NULL, 
+				grade INTEGER NOT NULL, 
+				price REAL NOT NULL,
+				date INTEGER NOT NULL,
+				FOREIGN KEY(station_id) REFERENCES gas_stations(_id)
+				);
+		</patch>
+	</schemaPatch>
+</sql>

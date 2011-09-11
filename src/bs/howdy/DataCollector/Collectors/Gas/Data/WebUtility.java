@@ -65,9 +65,6 @@ public class WebUtility implements IWebHelper {
 		return decodedMessage;
 	}
 
-	/* (non-Javadoc)
-	 * @see bs.howdy.DataCollector.Collectors.Gas.IWebHelper#getStationUrl(int)
-	 */
 	public String getStationUrl(int id) {
 		try {
 //			StringBuilder sb = new StringBuilder();
