@@ -3,30 +3,23 @@ package bs.howdy.DataCollector.Collectors.Gas.Activities;
 import java.util.ArrayList;
 
 import bs.howdy.DataCollector.R;
-import bs.howdy.DataCollector.Collectors.Gas.*;
-import android.app.*;
+import bs.howdy.DataCollector.Collectors.Gas.Constants;
+import bs.howdy.DataCollector.Collectors.Gas.Station;
+import bs.howdy.DataCollector.Collectors.Gas.StationProvider;
+import android.app.ListActivity;
 import android.content.Intent;
-import android.os.*;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-
-public class StationsListActivity extends ListActivity {
-	private StationProvider dp;
-	
+public class StationsGetListActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		setContentView(R.layout.station_list);
 		
-		dp = StationProvider.getInstance();
-		ArrayList<String> stations = new ArrayList<String>();
-		for(Station s : dp.getStations()) {
-			stations.add(String.valueOf(s.getId()));
-		}
-		
-		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stations));
+		setListAdapter(new StationAdapter(this, null));
 	}
 	
 	

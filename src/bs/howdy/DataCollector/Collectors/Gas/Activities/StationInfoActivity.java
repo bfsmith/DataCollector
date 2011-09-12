@@ -16,7 +16,6 @@ import com.androidplot.series.XYSeries;
 
 import bs.howdy.DataCollector.R;
 import bs.howdy.DataCollector.Collectors.Gas.*;
-import bs.howdy.DataCollector.Collectors.Gas.Data.*;
 import android.app.*;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -38,7 +37,7 @@ public class StationInfoActivity extends Activity {
         }
 
     	int id = extras.getInt(Constants.Extras.ID);
-    	StationDataProvider dp = StationDataProvider.getInstance();
+    	StationProvider dp = StationProvider.getInstance();
     	Station station = dp.getStation(id);
     	
     	if(station == null) {

@@ -30,7 +30,7 @@ public class GasPriceDataProvider {
 		_priceFormat = new DecimalFormat("0.00");
 	}
 	
-	public static GasPriceDataProvider createInstance(Context context) {
+	public static GasPriceDataProvider createOrGetInstance(Context context) {
 		if(_instance == null)
 			_instance = new GasPriceDataProvider(context);
 		return _instance;
@@ -73,6 +73,12 @@ public class GasPriceDataProvider {
 		boolean result = c.getCount() > 0;
 		c.close();
 		return result;
+	}
+	
+	public boolean deleteStationPrices(int stationId) {
+		return _db.getWritableDatabase()
+				.delete(Constants.Database.TABLE_PRICES, 
+					Constants.Database.COLUMN_PRICES_STATIONID + " = ?", new String[] { String.valueOf(stationId) }) > 0;
 	}
 
 	protected List<GasPrice> parseGasPrices(Cursor c) {

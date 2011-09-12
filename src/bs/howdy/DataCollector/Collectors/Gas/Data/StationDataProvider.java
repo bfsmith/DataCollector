@@ -12,7 +12,6 @@ import bs.howdy.DataCollector.Collectors.Gas.Constants;
 
 public class StationDataProvider {
 	private static StationDataProvider _instance;
-	private GasPriceDataProvider _priceDataProvider;
 	private DatabaseHelper _db;
 	private StationFactory _factory;
 
@@ -26,10 +25,9 @@ public class StationDataProvider {
 	private StationDataProvider(Context context) {
 		_db = new DatabaseHelper(context);
 		_factory = StationFactory.getInstance();
-		_priceDataProvider = GasPriceDataProvider.createInstance(context);
 	}
 	
-	public static StationDataProvider createInstance(Context context) {
+	public static StationDataProvider createOrGetInstance(Context context) {
 		if(_instance == null)
 			_instance = new StationDataProvider(context);
 		return _instance;
@@ -40,21 +38,6 @@ public class StationDataProvider {
 			_instance = new StationDataProvider();
 		return _instance;
 	}
-
-//	private void feedData() {
-//		StationFactory factory = StationFactory.getInstance();
-//		DateTime d = new DateTime(2011, 8, 29, 0, 0);
-//		for(int i = 1; i <= 3; i++) {
-//			Station station = factory.createStation(i, "Station" + i, "Location" + i);
-//			for(int j = 0; j < 3; j++) {
-//				for(GasGrade grade : GasGrade.values()) {
-//					station.addGasPrice(new GasPrice(station.getId(), grade, r.nextFloat() + 3, d));
-//				}
-//				d = d.plusHours(1);
-//			}
-//			addStation(station);
-//		}
-//	}
 	
 	public Station getStation(int id) {
 		SQLiteDatabase db = _db.getReadableDatabase();
@@ -115,14 +98,7 @@ public class StationDataProvider {
 		int id = c.getInt(c.getColumnIndex(Constants.Database.COLUMN_STATIONS_ID));
 		String name = c.getString(c.getColumnIndex(Constants.Database.COLUMN_STATIONS_NAME));
 		String location = c.getString(c.getColumnIndex(Constants.Database.COLUMN_STATIONS_LOCATION));
-		Station station = _factory.createStation(id, name, location);
-		
-		station.setRegularPrices(_priceDataProvider.getGasPrices(station.getId(), GasGrade.Regular));
-		station.setMidPrices(_priceDataProvider.getGasPrices(station.getId(), GasGrade.Mid));
-		station.setPremiumPrices(_priceDataProvider.getGasPrices(station.getId(), GasGrade.Premium));
-		station.setDieselPrices(_priceDataProvider.getGasPrices(station.getId(), GasGrade.Diesel));
-		
-		return station;
+		return _factory.createStation(id, name, location);
 	}
 	
 	private ContentValues createContentValues(Station s) {

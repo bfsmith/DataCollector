@@ -29,7 +29,8 @@ public final class R {
         public static final int station_list=0x7f030002;
     }
     public static final class raw {
-        public static final int sql=0x7f040000;
+        public static final int list=0x7f040000;
+        public static final int sql=0x7f040001;
     }
     public static final class string {
         public static final int Date=0x7f050007;

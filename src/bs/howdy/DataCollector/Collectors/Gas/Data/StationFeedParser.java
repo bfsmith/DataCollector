@@ -1,9 +1,6 @@
 package bs.howdy.DataCollector.Collectors.Gas.Data;
 
 import java.io.ByteArrayInputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,20 +14,19 @@ import bs.howdy.DataCollector.Collectors.Gas.Constants;
 import bs.howdy.DataCollector.Collectors.Gas.GasGrade;
 import bs.howdy.DataCollector.Collectors.Gas.GasPrice;
 import bs.howdy.DataCollector.Collectors.Gas.Station;
+import bs.howdy.DataCollector.Collectors.Gas.StationProvider;
 
 import android.util.Log;
 
-public class StationFeedParser {
-	private DocumentBuilderFactory xmlFactory;
-	private final SimpleDateFormat XML_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS"); // 2011-09-11T02:26:03.007
-	private StationDataProvider gdp;
+public class StationFeedParser extends FeedParser {
+	private StationProvider gdp;
 	private GasPriceDataProvider gpdp; 
 	
 	private static StationFeedParser _instance;
 	
 	private StationFeedParser() {
 		xmlFactory = DocumentBuilderFactory.newInstance();
-		gdp = StationDataProvider.getInstance();
+		gdp = StationProvider.getInstance();
 		gpdp = GasPriceDataProvider.getInstance();
 	}
 	
@@ -53,30 +49,6 @@ public class StationFeedParser {
 			}	
 		} catch (Exception e) {
 		}
-	}
-	
-	private String getTextValue(Element ele, String tagName) {
-		String textVal = null;
-		NodeList nl = ele.getElementsByTagName(tagName);
-		if(nl != null && nl.getLength() > 0) {
-			Element el = (Element)nl.item(0);
-			textVal = el.getFirstChild().getNodeValue();
-		}
-
-		return textVal;
-	}
-	private int getIntValue(Element ele, String tagName) {
-		return Integer.parseInt(getTextValue(ele,tagName));
-	}
-	private float getFloatValue(Element ele, String tagName) {
-		return Float.parseFloat(getTextValue(ele,tagName));
-	}
-	private DateTime getDateValue(Element ele, String tagName) throws ParseException {
-		Date d = XML_DATE_FORMAT.parse(getTextValue(ele,tagName));
-		return new DateTime(d.getTime());
-	}
-	private boolean getBooleanValue(Element ele, String tagName) {
-		return Boolean.parseBoolean(getTextValue(ele,tagName));
 	}
 	
 	private void parseStation(Element stationElement) {
