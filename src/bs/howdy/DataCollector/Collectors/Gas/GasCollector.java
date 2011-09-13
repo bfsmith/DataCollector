@@ -12,7 +12,15 @@ import bs.howdy.DataCollector.Collectors.Gas.Data.*;
 import bs.howdy.DataCollector.Service.*;
 
 public class GasCollector extends BaseDataCollector {
-	
+	@Override
+	public String getName() {
+		return this.getClass().getCanonicalName();
+	}
+
+	@Override
+	public long getRunIntervalInMillis() {
+		return 3600000L;
+	}
 	@Override
 	public Object collect() {
 		HttpClient httpClient = new DefaultHttpClient();

@@ -1,7 +1,7 @@
 package bs.howdy.DataCollector.Activity;
 
 import bs.howdy.DataCollector.R;
-import bs.howdy.DataCollector.Collectors.Gas.Activities.StationsListActivity;
+import bs.howdy.DataCollector.Collectors.Gas.Activities.GasHomeActivity;
 import bs.howdy.DataCollector.Service.CollectorService;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,16 +15,16 @@ public class DataCollectorMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        startService(new Intent(CollectorService.class.getName()));        
+        //startService(new Intent(this, CollectorService.class));        
     }
     
     @Override
     public void onDestroy() {
-    	//stopService(new Intent(CollectorService.class.getName()));
+    	//stopService(new Intent(this, CollectorService.class));
     	super.onDestroy();
     }
     
-    public void listStations(View v) {
-    	startActivity(new Intent(this, StationsListActivity.class));
+    public void gasHome(View v) {
+    	startActivity(new Intent(this, GasHomeActivity.class));
     }
 }

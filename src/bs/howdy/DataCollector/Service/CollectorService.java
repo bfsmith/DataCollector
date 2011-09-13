@@ -33,9 +33,8 @@ public class CollectorService extends Service {
 		
 		for(BaseDataCollector collector : _collectors) {
 			CollectorTask task = new CollectorTask(collector);
-		 
 		    Timer timer = new Timer();
-		    timer.schedule(task, 1000L, 3600000L); // Every hour
+		    timer.schedule(task, 0L, collector.getRunIntervalInMillis());
 		    _timers.add(timer);
 		}
 		

@@ -2,6 +2,7 @@ package bs.howdy.DataCollector.Collectors.Gas.Activities;
 
 import java.util.List;
 
+import bs.howdy.DataCollector.R;
 import bs.howdy.DataCollector.Collectors.Gas.Station;
 
 import android.app.Activity;
@@ -11,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class StationAdapter extends ArrayAdapter<Station> {
+public class AddStationsAdapter extends ArrayAdapter<Station> {
 	private Activity _context;
 
-	public StationAdapter(Activity context, List<Station> stations) {
-		super(context, android.R.layout.two_line_list_item, stations);
+	public AddStationsAdapter(Activity context, List<Station> stations) {
+		super(context, R.layout.gas_add_stations_list_item, stations);
 		_context = context;
 	}
 

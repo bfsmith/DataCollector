@@ -28,7 +28,7 @@ public class StationInfoActivity extends Activity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.station_info);
+		setContentView(R.layout.gas_station_info);
 		
 		Bundle extras = getIntent().getExtras();
         if(extras == null || !extras.containsKey(Constants.Extras.ID)) {
