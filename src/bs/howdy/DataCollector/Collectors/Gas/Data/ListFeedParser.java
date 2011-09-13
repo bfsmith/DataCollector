@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import bs.howdy.DataCollector.Collectors.Gas.Constants;
@@ -30,34 +31,39 @@ public class ListFeedParser extends FeedParser {
 	}
 	
 	public List<Station> parseStationResponse(String response) {
+		ArrayList<Station> stations = new ArrayList<Station>();
 		try {
 			DocumentBuilder db = xmlFactory.newDocumentBuilder();
 			Document doc = db.parse(new ByteArrayInputStream(response.getBytes(Constants.CHARSET)));
 			Element docEle = doc.getDocumentElement();
 			
-			NodeList stationNodes = docEle.getElementsByTagName("Station");
-			ArrayList<Station> stations = new ArrayList<Station>();
+			NodeList stationNodes = docEle.getElementsByTagName("Price");
 			
-			if(stations != null) {
+			if(stationNodes != null) {
 				for(int i = 0; i < stationNodes.getLength(); i++) {
 					Element stationElement = (Element)stationNodes.item(i);
-					parseStation(stationElement);
+					Station station = parseStation(stationElement);
+					if(station != null)
+						stations.add(station);
 				}
 			}
-			return stations;
 		} catch (Exception e) {
-			return null;
 		}
+		return stations;
 	}
 	
 	private Station parseStation(Element stationElement) {
-		int id = getIntValue(stationElement, "StationId");
-		String name = getTextValue(stationElement, "StationName");
-		String location = getTextValue(stationElement, "Address") + " " +
-				getTextValue(stationElement, "City") + " " +
-				getTextValue(stationElement, "State") + " " +
-				getTextValue(stationElement, "PostalCode");
-		Station station = stationFactory.createStation(id, name, location);
-		return station;
+		try {
+			int id = getIntValue(stationElement, "StationId");
+			String name = getTextValue(stationElement, "StationName");
+			String location = getTextValue(stationElement, "Address") + " " +
+					getTextValue(stationElement, "City") + " " +
+					getTextValue(stationElement, "State") + " " +
+					getTextValue(stationElement, "PostalCode");
+			Station station = stationFactory.createStation(id, name, location);
+			return station;
+		} catch(Exception e) {
+			return null;
+		}
 	}
 }

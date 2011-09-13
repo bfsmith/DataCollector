@@ -13,7 +13,7 @@ import org.w3c.dom.NodeList;
 public class FeedParser {
 
 	protected DocumentBuilderFactory xmlFactory;
-	private final SimpleDateFormat XML_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+	private final SimpleDateFormat XML_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	public FeedParser() {
 		super();

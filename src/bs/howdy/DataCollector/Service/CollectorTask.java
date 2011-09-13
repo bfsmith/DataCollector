@@ -12,8 +12,6 @@ public class CollectorTask extends TimerTask {
 	
 	@Override
 	public void run() {
-		Object obj = _collector.collect();
-		_collector.results(obj);
-		
+		_collector.collect();
 	}
 }

@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 public class StationsListActivity extends ListActivity {
 	private StationProvider dp;
+	private Handler handler = new Handler();
+	private OnDemandCollector onDemandCollector;
 	
 	@Override
 	public void onCreate(Bundle savedInstance) {
@@ -29,6 +31,7 @@ public class StationsListActivity extends ListActivity {
 		}
 		
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stations));
+		onDemandCollector = new OnDemandCollector(this);
 	}
 	
 	@Override
@@ -41,23 +44,29 @@ public class StationsListActivity extends ListActivity {
 		startActivity(intent);
 	}
 	
-	public void collectNow(View vew) {
-		final Context context = this;
-		Runnable collect = new Runnable() {
-			@Override
-			public void run() {
-				int message;
-				try {
-					GasCollector gc = new GasCollector();
-					gc.results(gc.collect());
-					message = R.string.CollectionSuccessful;
-				} catch(Exception ex) {
-					message = R.string.CollectionFailed;
-				}
-				Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+	private class OnDemandCollector implements Runnable {
+		private Context context;
+		
+		public OnDemandCollector(Context context) {
+			this.context = context;
+		}
+		
+		@Override
+		public void run() {
+			int message;
+			try {
+				GasCollector gc = new GasCollector();
+				gc.collect();
+				message = R.string.CollectionSuccessful;
+			} catch(Exception ex) {
+				message = R.string.CollectionFailed;
 			}
-		};
-		Thread t = new Thread(collect);
-		t.start();
+			Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+		}
+	};
+	
+	public void collectNow(View vew) {
+		handler.removeCallbacks(onDemandCollector);
+		handler.post(onDemandCollector);
 	}
 }

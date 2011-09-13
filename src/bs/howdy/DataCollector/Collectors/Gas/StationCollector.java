@@ -1,41 +1,40 @@
 package bs.howdy.DataCollector.Collectors.Gas;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.w3c.dom.Document;
 
 import android.util.Log;
+import bs.howdy.DataCollector.App;
+import bs.howdy.DataCollector.R;
 import bs.howdy.DataCollector.Collectors.Gas.Data.*;
-import bs.howdy.DataCollector.Service.*;
 
-public class GasCollector extends BaseDataCollector {
-	@Override
-	public String getName() {
-		return this.getClass().getCanonicalName();
-	}
-
-	@Override
-	public long getRunIntervalInMillis() {
-		return 3600000L;
-	}
-	@Override
-	public void collect() {
-		List<Station> stations = StationProvider.getInstance().getStations();
-		for(Station station : stations) {
-			String xml = getResponse(station.getId());
-			parseResponse(xml);
-		}
+public class StationCollector {
+	public List<Station> getStations(int zipcode) {
+		//String xmlResponse = getStationsResponse(zipcode);
+		
+		InputStream in = App.getContext().getResources().openRawResource(R.raw.list);
+		String xmlResponse  = streamToString(in);
+		
+		List<Station> stations = parseStations(xmlResponse);
+		return stations;
 	}
 	
-	public String getResponse(int stationId) {
+	public String getStationsResponse(int zipcode) {
 		HttpClient httpClient = new DefaultHttpClient();
 		WebUtility utility = WebUtility.getInstance();
 		
-		HttpGet getMethod = new HttpGet(utility.getStationUrl(stationId));
+		String url = utility.getListUrl(zipcode);
+		HttpGet getMethod = new HttpGet(url);
 		HttpResponse response;
 		try {
 			response = httpClient.execute(getMethod);
@@ -60,12 +59,14 @@ public class GasCollector extends BaseDataCollector {
 		return sb.toString();
 	}
 
-	public void parseResponse(String xml) {
+	public List<Station> parseStations(String xml) {
 		if(xml == null)
-			return;
-		StationFeedParser parser = StationFeedParser.getInstance();
-		parser.parseStationResponse(xml);
+			return new ArrayList<Station>();
+		ListFeedParser parser = ListFeedParser.getInstance();
+		List<Station> stations = parser.parseStationResponse(xml);
 		
 		Log.i(Constants.TAG, "Parsed gas station results.");
+		
+		return stations;
 	}
 }

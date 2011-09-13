@@ -105,7 +105,7 @@ public class WebUtility implements IWebHelper {
 			sb = new StringBuilder();
 			sb.append("http://");	// Add protocol
 			sb.append("xml.gasbuddy.com");	// host
-			sb.append("/Mobile_GasBuddy_Details_Feed_v4.ashx");	// station_path
+			sb.append("/Mobile_GasBuddy_Station_Locator_Feed_v4.ashx");	// station_path
 			sb.append("?q=");	// query prefix
 			
 			byte[] encryptedData = encrypt3Des(dataString);
