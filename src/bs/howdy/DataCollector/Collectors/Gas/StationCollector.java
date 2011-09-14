@@ -4,29 +4,31 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.w3c.dom.Document;
 
 import android.util.Log;
-import bs.howdy.DataCollector.App;
-import bs.howdy.DataCollector.R;
 import bs.howdy.DataCollector.Collectors.Gas.Data.*;
 
 public class StationCollector {
 	public List<Station> getStations(int zipcode) {
-		//String xmlResponse = getStationsResponse(zipcode);
-		
-		InputStream in = App.getContext().getResources().openRawResource(R.raw.list);
-		String xmlResponse  = streamToString(in);
+		String xmlResponse = getStationsResponse(zipcode);
 		
 		List<Station> stations = parseStations(xmlResponse);
-		return stations;
+		if(stations.size() == 0) 
+			return stations;
+		
+		List<Station> newStations = new ArrayList<Station>();
+		StationProvider sp = StationProvider.getInstance();
+		
+		for(Station station : stations) {
+			if(sp.getStation(station.getId()) == null)
+				newStations.add(station);
+		}
+		
+		return newStations;
 	}
 	
 	public String getStationsResponse(int zipcode) {

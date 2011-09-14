@@ -32,5 +32,6 @@
         <activity android:name=".Collectors.Gas.Activities.StationInfoActivity"></activity>
         <activity android:name=".Collectors.Gas.Activities.AddStationsListActivity"></activity>
         <activity android:name=".Collectors.Gas.Activities.GasHomeActivity"></activity>
+        <activity android:name=".Collectors.Gas.Activities.EnterZipcodeActivity"></activity>
     </application>
 </manifest>

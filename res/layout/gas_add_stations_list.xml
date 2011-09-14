@@ -8,7 +8,7 @@
 	     android:layout_width="fill_parent" 
 	     android:layout_height="wrap_content"
 	     android:layout_alignParentTop="true"
-	     android:layout_above="@+id/nextRunTimeText"
+	     android:layout_above="@android:id/button1"
 	     android:choiceMode="multipleChoice" />
     <TextView android:id="@id/android:empty"
 	     android:layout_width="wrap_content"
@@ -16,9 +16,10 @@
 	     android:text="@string/NoStations" 
 	     android:layout_alignParentTop="true"
 	     android:layout_above="@+id/nextRunTimeText" />
-    <Button android:text="@string/AddStations" 
+    <Button android:id="@android:id/button1"
+    	android:text="@string/AddStations" 
     	android:layout_height="wrap_content" 
-    	android:layout_width="fill_parent" 
+    	android:layout_width="fill_parent"
     	android:layout_alignParentBottom="true"
     	android:onClick="addStations" />
 </RelativeLayout>

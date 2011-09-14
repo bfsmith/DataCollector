@@ -5,6 +5,5 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="lib/joda-time-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/Androidplot-core-0.4.4-release.jar"/>
-	<classpathentry kind="lib" path="lib/Androidplot-core-0.4.4-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

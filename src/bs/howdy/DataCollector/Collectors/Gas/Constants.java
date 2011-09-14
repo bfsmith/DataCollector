@@ -8,6 +8,7 @@ public class Constants {
 	
 	public class Extras {
 		public final static String ID = "id";
+		public final static String ZIPCODE = "zipcode";
 	}
 	
 	public final static int[] Colors = { Color.rgb(82, 105, 138), 	// Blue 

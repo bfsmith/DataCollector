@@ -49,7 +49,7 @@
 	    android:layout_marginTop="10px"
 	    android:layout_marginLeft="0px"
 	    android:layout_marginRight="0px"
-	    title="Yo"
+	    title="Prices Over Time"
     	/>
     
 </LinearLayout>

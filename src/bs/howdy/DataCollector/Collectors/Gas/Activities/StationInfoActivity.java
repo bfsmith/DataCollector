@@ -57,39 +57,23 @@ public class StationInfoActivity extends Activity {
 	}
 
 	private void createTable(Station station, TableLayout table) {
-		List<GasPrice> regular = station.getRegularPrices();
-		List<GasPrice> mid = station.getMidPrices();
-		List<GasPrice> premium = station.getPremiumPrices();
-		List<GasPrice> diesel = station.getDieselPrices();
-    	
-		int maxLength = Math.max(
-					Math.max(regular.size(), mid.size()),
-					Math.max(premium.size(), diesel.size())
-				);
+		TableRow row = new TableRow(this);
+		row.setLayoutParams(new TableRow.LayoutParams(
+                LayoutParams.FILL_PARENT,
+                LayoutParams.WRAP_CONTENT));
+    		
+		addTextView(row, getLatestPrice(station.getRegularPrices()));
+		addTextView(row, getLatestPrice(station.getMidPrices()));
+		addTextView(row, getLatestPrice(station.getPremiumPrices()));
+		addTextView(row, getLatestPrice(station.getDieselPrices()));
 		
-    	for(int i = 0; i < maxLength; i++) {
-    		GasPrice r = null, m = null, p = null, d = null;
-    		if(regular.size() > i)
-    			r = regular.get(i);
-    		if(mid.size() > i)
-    			m = mid.get(i);
-    		if(premium.size() > i)
-    			p = premium.get(i);
-    		if(diesel.size() > i)
-    			d = diesel.get(i);
-    		
-    		TableRow row = new TableRow(this);
-    		row.setLayoutParams(new TableRow.LayoutParams(
-                    LayoutParams.FILL_PARENT,
-                    LayoutParams.WRAP_CONTENT));
-    		
-    		addTextView(row, r != null ? r.getPrice() : -1f);
-    		addTextView(row, m != null ? m.getPrice() : -1f);
-    		addTextView(row, p != null ? p.getPrice() : -1f);
-    		addTextView(row, d != null ? d.getPrice() : -1f);
-    		
-    		table.addView(row);
-    	}
+		table.addView(row);
+	}
+	
+	private float getLatestPrice(List<GasPrice> prices) {
+		if(prices.isEmpty())
+			return -1f;
+		return prices.get(prices.size()-1).getPrice();
 	}
 
 	private void addTextView(TableRow row, float price) {
@@ -104,11 +88,11 @@ public class StationInfoActivity extends Activity {
 	
 	private void createChart(Station station) {
 		XYPlot plot = (XYPlot) findViewById(R.id.chart);
-		setupChart(plot);
+		setupChart(plot, station);
 		addSeries(plot, station);
 	}
 	
-	private void setupChart(XYPlot plot) {
+	private void setupChart(XYPlot plot, Station station) {
 		plot.getGraphWidget().getGridBackgroundPaint().setColor(Color.WHITE);
         plot.getGraphWidget().getGridLinePaint().setColor(Color.BLACK);
         plot.getGraphWidget().getGridLinePaint().setPathEffect(new DashPathEffect(new float[]{1,1}, 1));
@@ -132,7 +116,7 @@ public class StationInfoActivity extends Activity {
         // get rid of decimal points in our range labels:
         plot.setRangeValueFormat(new DecimalFormat("$0.00"));
         plot.setDomainValueFormat(new MyDateFormat());
- 
+        
         // by default, AndroidPlot displays developer guides to aid in laying out your plot.
         // To get rid of them call disableAllMarkup():
         plot.disableAllMarkup();

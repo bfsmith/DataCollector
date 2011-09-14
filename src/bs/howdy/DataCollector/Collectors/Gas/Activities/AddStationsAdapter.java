@@ -23,13 +23,13 @@ public class AddStationsAdapter extends ArrayAdapter<Station> {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = _context.getLayoutInflater();
-		View rowView = inflater.inflate(android.R.layout.two_line_list_item, null, true);
+		View rowView = inflater.inflate(R.layout.gas_add_stations_list_item, null, true);
 		final Station s = getCount() > position ? getItem(position) : null;
 		if(s == null) return null;
 			
-		TextView title = (TextView) rowView.findViewById(android.R.id.text1);
+		TextView title = (TextView) rowView.findViewById(R.id.name);
 		title.setText(s.getName());
-		TextView location = (TextView) rowView.findViewById(android.R.id.text2);
+		TextView location = (TextView) rowView.findViewById(R.id.location);
 		location.setText(s.getLocation());
 		
 		return rowView;

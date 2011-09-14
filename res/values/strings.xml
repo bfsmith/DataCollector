@@ -16,4 +16,6 @@
     <string name="Zipcode">Zipcode</string>
     <string name="Find">Find</string>
     <string name="Gas">Gas</string>
+    <string name="ChartTitle">Prices Over Time</string>
+    <string name="Search">Search</string>
 </resources>
