@@ -52,12 +52,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private int getCurrentSchemaVersion(SQLiteDatabase db) {
 		Log.v(Constants.TAG, "readonly = " + db.isReadOnly());
-		Cursor cursor = db.rawQuery("SELECT CASE ( SELECT 1 FROM sqlite_master WHERE type='table' AND name='?' ) WHEN 1 THEN MAX(?) ELSE 0 END FROM ?;"
-				, new String[] { 
-						Constants.Database.TABLE_SCHEMAPATCHES, 
-						Constants.Database.COLUMN_SCHEMAPATCHES_PATCH, 
-						Constants.Database.TABLE_SCHEMAPATCHES 
-						});
+		Cursor cursor = db.rawQuery("SELECT CASE ( SELECT 1 FROM sqlite_master WHERE type='table' AND name='" + 
+				Constants.Database.TABLE_SCHEMAPATCHES + "' ) WHEN 1 THEN (SELECT MAX(" +
+				Constants.Database.COLUMN_SCHEMAPATCHES_PATCH + ") FROM " + 
+				Constants.Database.TABLE_SCHEMAPATCHES  + ") ELSE 0 END;"
+				, null);
 		
 		if(cursor == null)
 			return 0;

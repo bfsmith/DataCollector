@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StationAdapter extends ArrayAdapter<Station> {
 	private Activity _context;
@@ -31,6 +32,15 @@ public class StationAdapter extends ArrayAdapter<Station> {
 		title.setText(s.getName());
 		TextView location = (TextView) rowView.findViewById(R.id.location);
 		location.setText(s.getLocation());
+		
+		rowView.setOnLongClickListener(new View.OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				Toast.makeText(_context, "You long clicked me!", Toast.LENGTH_SHORT).show();
+				return true;
+			}
+		});
 		
 		return rowView;
 	}

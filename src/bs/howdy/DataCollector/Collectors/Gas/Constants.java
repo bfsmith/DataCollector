@@ -20,13 +20,14 @@ public class Constants {
 										};
 	public class Database {
 		public static final String NAME = "gas";
-		public static final int VERSION = 3;
+		public static final int VERSION = 11;
 		
 		public static final String TABLE_SCHEMAPATCHES = "schema_patches";
 		public static final String COLUMN_SCHEMAPATCHES_PATCH = "patch";
 		
 		public static final String TABLE_STATIONS = "gas_stations";
 		public static final String COLUMN_STATIONS_ID = "_id";
+		public static final String COLUMN_STATIONS_STATIONID = "station_id";
 		public static final String COLUMN_STATIONS_NAME = "name";
 		public static final String COLUMN_STATIONS_LOCATION = "location";
 

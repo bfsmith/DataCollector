@@ -20,5 +20,43 @@
 				FOREIGN KEY(station_id) REFERENCES gas_stations(_id)
 				);
 		</patch>
+		<patch number="4">
+			CREATE TABLE IF NOT EXISTS gas_stations2 (
+				_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+				station_id INTEGER NOT NULL,
+				name TEXT NOT NULL, 
+				location TEXT NOT NULL
+				);
+		</patch>
+		<patch number="5">	
+			INSERT INTO gas_stations2
+				SELECT null, _id, name, location FROM gas_stations;
+		</patch>
+		<patch number="6">	
+			CREATE TABLE IF NOT EXISTS gas_prices2 (
+				_id INTEGER PRIMARY KEY AUTOINCREMENT,
+				station_id INTEGER NOT NULL, 
+				grade INTEGER NOT NULL, 
+				price REAL NOT NULL,
+				date INTEGER NOT NULL,
+				FOREIGN KEY(station_id) REFERENCES gas_stations2(station_id)
+				);
+		</patch>
+		<patch number="7">
+			INSERT INTO gas_prices2
+				SELECT null, station_id, grade, price, date FROM gas_prices;
+		</patch>
+		<patch number="8">	
+			DROP TABLE gas_prices;
+		</patch>
+		<patch number="9">
+			DROP TABLE gas_stations;
+		</patch>
+		<patch number="10">	
+			ALTER TABLE gas_stations2 RENAME TO gas_stations;
+		</patch>
+		<patch number="11">
+			ALTER TABLE gas_prices2 RENAME TO gas_prices;
+		</patch>
 	</schemaPatch>
 </sql>

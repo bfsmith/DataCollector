@@ -15,7 +15,7 @@ public class DataCollectorMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        startService(new Intent(this, CollectorService.class));        
+        //startService(new Intent(this, CollectorService.class));        
     }
     
     @Override

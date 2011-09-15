@@ -15,7 +15,7 @@ public class StationDataProvider {
 	private DatabaseHelper _db;
 	private StationFactory _factory;
 
-	private static final String[] columns_stations = new String[] { Constants.Database.COLUMN_STATIONS_ID, 
+	private static final String[] columns_stations = new String[] { Constants.Database.COLUMN_STATIONS_STATIONID, 
 		Constants.Database.COLUMN_STATIONS_NAME, Constants.Database.COLUMN_STATIONS_LOCATION };
 
 	private StationDataProvider() {
@@ -42,7 +42,7 @@ public class StationDataProvider {
 	public Station getStation(int id) {
 		SQLiteDatabase db = _db.getReadableDatabase();
 		Cursor c = db.query(Constants.Database.TABLE_STATIONS, columns_stations,  
-				Constants.Database.COLUMN_STATIONS_ID + " = ?", new String[] { String.valueOf(id) }, null, null,
+				Constants.Database.COLUMN_STATIONS_STATIONID + " = ?", new String[] { String.valueOf(id) }, null, null,
 				null);
 		if(c.getCount() == 0) {
 			c.close();
@@ -69,13 +69,13 @@ public class StationDataProvider {
 	public boolean updateStation(Station station) {
 		return _db.getWritableDatabase()
 				.update(Constants.Database.TABLE_STATIONS, createContentValues(station),
-						Constants.Database.COLUMN_STATIONS_ID + " = ?", new String[] { String.valueOf(station.getId()) }) > 0;
+						Constants.Database.COLUMN_STATIONS_STATIONID + " = ?", new String[] { String.valueOf(station.getId()) }) > 0;
 	}
 
 	public boolean deleteStation(Station station) {		
 		return _db.getWritableDatabase()
 				.delete(Constants.Database.TABLE_STATIONS, 
-						Constants.Database.COLUMN_STATIONS_ID + " = ?", new String[] { String.valueOf(station.getId()) }) > 0;
+						Constants.Database.COLUMN_STATIONS_STATIONID + " = ?", new String[] { String.valueOf(station.getId()) }) > 0;
 	}
 	
 	protected List<Station> parseStations(Cursor c) {
@@ -95,7 +95,7 @@ public class StationDataProvider {
 	protected Station parseStation(Cursor c) {
 		if(c.isAfterLast()) return null;
 		
-		int id = c.getInt(c.getColumnIndex(Constants.Database.COLUMN_STATIONS_ID));
+		int id = c.getInt(c.getColumnIndex(Constants.Database.COLUMN_STATIONS_STATIONID));
 		String name = c.getString(c.getColumnIndex(Constants.Database.COLUMN_STATIONS_NAME));
 		String location = c.getString(c.getColumnIndex(Constants.Database.COLUMN_STATIONS_LOCATION));
 		return _factory.createStation(id, name, location);
@@ -103,7 +103,7 @@ public class StationDataProvider {
 	
 	private ContentValues createContentValues(Station s) {
 		ContentValues values = new ContentValues();
-		values.put(Constants.Database.COLUMN_STATIONS_ID, s.getId());
+		values.put(Constants.Database.COLUMN_STATIONS_STATIONID, s.getId());
 		values.put(Constants.Database.COLUMN_STATIONS_NAME, s.getName());
 		values.put(Constants.Database.COLUMN_STATIONS_LOCATION, s.getLocation());
 		return values;
