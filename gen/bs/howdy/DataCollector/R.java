@@ -19,6 +19,8 @@ public final class R {
         public static final int Premium=0x7f060007;
         public static final int Regular=0x7f060005;
         public static final int chart=0x7f060009;
+        public static final int checkBox=0x7f06000b;
+        public static final int collectNowButton=0x7f06000a;
         public static final int location=0x7f060002;
         public static final int name=0x7f060001;
         public static final int nextRunTimeText=0x7f060000;
@@ -40,20 +42,25 @@ public final class R {
     }
     public static final class string {
         public static final int AddStations=0x7f05000c;
+        public static final int Cancel=0x7f050012;
         public static final int ChartTitle=0x7f050010;
         public static final int CollectNow=0x7f05000b;
         public static final int CollectionFailed=0x7f05000a;
         public static final int CollectionSuccessful=0x7f050009;
         public static final int Date=0x7f050007;
+        public static final int DeleteStationPrompt=0x7f050014;
+        public static final int DeleteStationTitle=0x7f050013;
         public static final int Diesel=0x7f050006;
         public static final int Find=0x7f05000e;
         public static final int Gas=0x7f05000f;
         public static final int Mid=0x7f050004;
+        public static final int No=0x7f050016;
         public static final int NoStations=0x7f050002;
         public static final int Premium=0x7f050005;
         public static final int Price=0x7f050008;
         public static final int Regular=0x7f050003;
         public static final int Search=0x7f050011;
+        public static final int Yes=0x7f050015;
         public static final int Zipcode=0x7f05000d;
         public static final int app_name=0x7f050001;
         public static final int hello=0x7f050000;

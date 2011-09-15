@@ -18,4 +18,9 @@
     <string name="Gas">Gas</string>
     <string name="ChartTitle">Prices Over Time</string>
     <string name="Search">Search</string>
+    <string name="Cancel">Cancel</string>
+    <string name="DeleteStationTitle">Delete Station?</string>
+    <string name="DeleteStationPrompt">Do you really want to delete this station?  All collected data will be lost.</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
 </resources>

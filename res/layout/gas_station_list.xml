@@ -15,9 +15,12 @@
 	     android:text="@string/NoStations" 
 	     android:layout_alignParentTop="true"
 	     android:layout_above="@+id/nextRunTimeText" />
-    <Button android:text="Collect Now" 
+    <Button
+    	android:id="@+id/collectNowButton" 
+    	android:text="@string/CollectNow" 
     	android:layout_height="wrap_content" 
     	android:layout_width="fill_parent" 
     	android:layout_alignParentBottom="true"
     	android:onClick="collectNow" />
+    
 </RelativeLayout>
