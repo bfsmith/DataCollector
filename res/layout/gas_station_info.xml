@@ -33,7 +33,7 @@
 	    	<TextView android:text="@string/Premium" 
 		    	android:id="@+id/Premium" 
 		    	android:layout_width="match_parent" 
-		    	android:layout_height="wrap_content"  
+		    	android:layout_height="wrap_content"
 		    	android:layout_weight="1"/>
 	    	<TextView android:text="@string/Diesel" 
 		    	android:id="@+id/Diesel" 
@@ -45,11 +45,10 @@
     <com.androidplot.xy.XYPlot
 	    android:id="@+id/chart"
 	    android:layout_width="fill_parent"
-	    android:layout_height="200px"
+	    android:layout_height="300px"
 	    android:layout_marginTop="10px"
 	    android:layout_marginLeft="0px"
 	    android:layout_marginRight="0px"
 	    title="Prices Over Time"
     	/>
-    
 </LinearLayout>

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.androidplot.Plot;
+import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
@@ -25,6 +26,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 
 public class StationInfoActivity extends Activity {
+	private float minPrice;
+	private float maxPrice;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,6 +42,8 @@ public class StationInfoActivity extends Activity {
     	int id = extras.getInt(Constants.Extras.ID);
     	StationProvider dp = StationProvider.getInstance();
     	Station station = dp.getStation(id);
+    	minPrice = 100;
+    	maxPrice = 0;
     	
     	if(station == null) {
     		finish();
@@ -90,6 +95,7 @@ public class StationInfoActivity extends Activity {
 		XYPlot plot = (XYPlot) findViewById(R.id.chart);
 		setupChart(plot, station);
 		addSeries(plot, station);
+		applyChangesToChart(plot);
 	}
 	
 	private void setupChart(XYPlot plot, Station station) {
@@ -116,10 +122,6 @@ public class StationInfoActivity extends Activity {
         // get rid of decimal points in our range labels:
         plot.setRangeValueFormat(new DecimalFormat("$0.00"));
         plot.setDomainValueFormat(new MyDateFormat());
-        
-        // by default, AndroidPlot displays developer guides to aid in laying out your plot.
-        // To get rid of them call disableAllMarkup():
-        plot.disableAllMarkup();
 	}
 	
 	private void addSeries(XYPlot plot, Station station) {
@@ -133,7 +135,16 @@ public class StationInfoActivity extends Activity {
 		if(station.getDieselPrices().size() > 0)
 			plot.addSeries(getSeries(station.getDieselPrices(), getResources().getString(R.string.Diesel)), getFormatter(counter++));
 	}
-	
+
+	private void applyChangesToChart(XYPlot plot) {
+        plot.setRangeUpperBoundary(padUpper(maxPrice), BoundaryMode.FIXED);
+        plot.setRangeLowerBoundary(padLower(minPrice), BoundaryMode.FIXED);
+
+        // by default, AndroidPlot displays developer guides to aid in laying out your plot.
+        // To get rid of them call disableAllMarkup():
+        plot.disableAllMarkup();
+	}
+
 	private LineAndPointFormatter getFormatter(int index) {
 		LineAndPointFormatter formatter = new LineAndPointFormatter(Constants.Colors[index], Constants.Colors[index], Color.TRANSPARENT);
 		Paint paint = formatter.getLinePaint();
@@ -149,13 +160,29 @@ public class StationInfoActivity extends Activity {
 		for(GasPrice gasPrice : gasPrices) {
 			dates.add(gasPrice.getDateSeen().getMillis());
 			prices.add(gasPrice.getPrice());
+			setMinMaxPrice(gasPrice.getPrice());
 		}
 		return new SimpleXYSeries(dates, prices, title);
 	}
 	
+	private void setMinMaxPrice(float price) {
+		if(price > maxPrice)
+			maxPrice = price;
+		if(price < minPrice)
+			minPrice = price;
+	}
+	
+	private float padLower(float price) {
+		return (float)((Math.floor(price*10)-1)/10);
+	}
+
+	private float padUpper(float price) {
+		return (float)((Math.floor(price*10)+2)/10);
+	}
+	
     @SuppressWarnings("serial")
 	private class MyDateFormat extends Format {
-            private SimpleDateFormat dateFormat = new SimpleDateFormat("EE, MMM  d");
+            private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
             
             @Override
             public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
