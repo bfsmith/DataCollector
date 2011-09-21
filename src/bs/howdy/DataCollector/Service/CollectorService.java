@@ -2,7 +2,6 @@ package bs.howdy.DataCollector.Service;
 
 import java.util.*;
 
-import bs.howdy.DataCollector.Collectors.Gas.GasCollector;
 import bs.howdy.DataCollector.*;
 
 import android.app.Service;
@@ -29,7 +28,7 @@ public class CollectorService extends Service {
 		_collectors = new ArrayList<BaseDataCollector>();
 		_timers = new ArrayList<Timer>();
 		
-		_collectors.add(new GasCollector());
+		//_collectors.add(new GasCollector());
 		
 		for(BaseDataCollector collector : _collectors) {
 			CollectorTask task = new CollectorTask(collector);
