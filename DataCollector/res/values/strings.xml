@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">Data Gather</string>
+    <string name="NoStations">No stations found...</string>
+    <string name="Regular">Regular</string>
+    <string name="Mid">Mid</string>
+    <string name="Premium">Premium</string>
+    <string name="Diesel">Diesel</string>
+    <string name="Date">Date</string>
+    <string name="Price">Price</string>
+    <string name="CollectionSuccessful">Collection Successful</string>
+    <string name="CollectionFailed">Collection Failed</string>
+    <string name="CollectNow">Collect Now</string>
+    <string name="AddStations">Add Selected Stations</string>
+    <string name="Zipcode">Zipcode</string>
+    <string name="Find">Find</string>
+    <string name="Gas">Gas</string>
+    <string name="ChartTitle">Prices Over Time</string>
+    <string name="Search">Search</string>
+    <string name="Cancel">Cancel</string>
+    <string name="DeleteStationTitle">Delete Station?</string>
+    <string name="DeleteStationPrompt">Do you really want to delete this station?  All collected data will be lost.</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+</resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, DataCollectorMainActivity!</string>
-    <string name="app_name">DataCollector</string>
+    <string name="app_name">Gas</string>
     <string name="NoStations">No stations found...</string>
     <string name="Regular">Regular</string>
     <string name="Mid">Mid</string>
@@ -13,7 +12,7 @@
     <string name="CollectionFailed">Collection Failed</string>
     <string name="CollectNow">Collect Now</string>
     <string name="AddStations">Add Selected Stations</string>
-    <string name="Zipcode">Zipcode</string>
+    <string name="Zipcode">Zip Code</string>
     <string name="Find">Find</string>
     <string name="Gas">Gas</string>
     <string name="ChartTitle">Prices Over Time</string>
